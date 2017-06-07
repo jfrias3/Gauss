@@ -147,7 +147,7 @@ class GaussInt(object):# Gaussian Integer class
             n -= 1
         return x
     
-    def cplot(self,iter):# still wonky, but soon I'll figure out the runtime issus
+    def cplot(self,iter):# try out increasing iter on some unsuspecting G int! does it stop adding points at some ... point?
         val = self.FN
         XLIST = []
         YLIST = []
