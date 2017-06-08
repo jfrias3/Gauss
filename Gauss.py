@@ -77,18 +77,26 @@ def pop(n):# returns the set (a list, but for my purposes it doesn't matter) of 
     i = GaussInt(0,1)
     result = []
     l = len(qres(n))
+    if l == 0:
+        return []
     for  y in qres(n):
         x = list(map(lambda x : K(x,n)*K(x*x+y,n),range(1,l+1)))
         a = reduce(lambda x,y: x+y, x)
-        z = GaussInt(a, int(sqrt(n-a**2)))
-        result.append(z)
-        result.append(i*z)
-        result.append((i**2)*z)
-        result.append((i**3)*z)
-        result.append(~z)
-        result.append(i*(~z))
-        result.append((i**2)*(~z))
-        result.append((i**3)*(~z))
+        if n < a**2:
+            continue
+        try:
+            z = GaussInt(a, int(sqrt(n-a**2)))
+        except ValueError:
+            print (n-a**2)
+        if int(sqrt(n-a**2)) == sqrt(n-a**2):
+            result.append(z)
+            result.append(i*z)
+            result.append((i**2)*z)
+            result.append((i**3)*z)
+            result.append(~z)
+            result.append(i*(~z))
+            result.append((i**2)*(~z))
+            result.append((i**3)*(~z))
     q = []
     counter = 0
     for g in result:
@@ -147,22 +155,29 @@ class GaussInt(object):# Gaussian Integer class
             n -= 1
         return x
     
-    def cplot(self,iter):# try out increasing iter on some unsuspecting G int! does it stop adding points at some ... point?
+    def cplot(self,iter):# 
         val = self.FN
         XLIST = []
         YLIST = []
         #fig = plt.figure()
         #ax = fig.add_subplot(111)
+        circle1 = plt.Circle((0, 0), sqrt(val), fill=False)
+        fig, ax = plt.subplots() 
+        ax.add_artist(circle1)
+
+
         while (iter>0):
             listy = pop(val)
             val = coll(val)
             XLIST = list(map(lambda f: f.x, listy))
             YLIST = list(map(lambda f: f.y, listy))
             iter -= 1
-            
             plt.plot(XLIST,YLIST, 'ro')
+            circle1 = plt.Circle((0, 0), sqrt(val), fill=False)
+            ax.add_artist(circle1)
             #for xy in zip(XLIST, YLIST):                                       
             #   ax.annotate('(%s, %s)' % xy, xy=xy, textcoords='data') 
+        ax.set_aspect('equal')
             
     def randomize(n):
         x = GaussInt(randint(0,n),randint(0,n))
